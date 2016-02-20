@@ -1,0 +1,27 @@
+<html>
+<head>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
+</head>
+<body>
+<h1> Hello world, JSON test </h1>
+<div id="jsondata"></div>
+
+<script>
+
+$( document ).ready(function(){
+	var urlInfo = "https://raw.githubusercontent.com/Jiantastic/ICHack-empty-parking-lot-detection/master/test.json";
+	jQuery.ajax({
+	url	 : urlInfo,
+	type : "GET",
+	success : function(response){
+		var obj = JSON.parse(response);
+		var testlog = obj.glossary.title;
+		var modify_html = document.getElementById("jsondata").innerHTML = testlog;
+	}
+	}).fail(function(jqXHR){
+		alert(jqXHR.status);
+	});
+});
+</script>
+</body>
+</html>
