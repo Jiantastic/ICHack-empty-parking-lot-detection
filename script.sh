@@ -1,4 +1,4 @@
-#! /bin/bash
+#!/bin/bash
 EXEC=./cpp_resize
 PATH=ParkingLot/
 FILESTART=images
