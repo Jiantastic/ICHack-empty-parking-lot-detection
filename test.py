@@ -1,10 +1,12 @@
-import httplib2, argparse, os, sys, json
+import httplib2, argparse, os, sys, json, math
 from oauth2client import tools, file, client
 from googleapiclient import discovery
 from googleapiclient.errors import HttpError
 
 project_id = "ichackathon"
 model_id = "training1"
+
+inputFile = "Data/TrainingTest23.csv"
 
 def train_model():
 	api = get_prediction_api(False)
@@ -29,22 +31,11 @@ def check_if_ready():
 		print ('Still training \n Run again after a while')
 		exit()
 	print ('Model is ready')
-	#train_model()
 	make_prediction()
-	#analyse_model()
-
-def update_model():
-	api = get_prediction_api(False)
-	with open('Data/TrainingTest1.csv') as file:
-		record = file.readline().split(',')
-	iBody = {
-		"csvIsntance":record
-	}
-	model = api.trainedmodels().update(project=project_id, id = model_id, body=iBody).execute()
 
 def make_prediction():
 	api = get_prediction_api(False)
-	with open('Data/TrainingTest2.csv') as file:
+	with open(inputFile) as file:
 		record = file.readline().split(',')
 	iBody = {
 		'input': {
@@ -55,7 +46,6 @@ def make_prediction():
 	
 	finalPrediction = prediction.get('outputValue')
 	#probabilities = prediction.get('outputMulti')
-
 	print(finalPrediction)
 	#print(probabilities)
 
