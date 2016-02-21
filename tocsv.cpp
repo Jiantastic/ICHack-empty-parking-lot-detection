@@ -10,6 +10,7 @@
 #include <cstdlib>
 #include <string>
 #include <sstream>
+#include <cstdint>
 
 using namespace cv;
 using namespace std;
@@ -53,10 +54,21 @@ int main( int argc, char** argv ){
     int result;
     results_data>>result;
     cout<<result<<endl;
-    csv_outfile<< result <<endl;
-    csv_outfile<< format(src_im, "csv")  <<endl;
-    csv_outfile.clear();
+    csv_outfile<< result;
+    //csv_outfile<< format(src_im, "numpy")  <<endl;
+    //csv_outfile.clear();
+    for(int i=0; i<src_im.rows; i++)
+    {
+        for(int j=0; j<src_im.cols; j++)
+        {
+            csv_outfile<<", "<<src_im.at<uint32_t>(i,j);
+        }
+    }
+    csv_outfile<<endl;
 
+    //cv::Formatter const * c_formatter(cv::Formatter::get("CSV"));
+
+    //c_formatter->write(csv_outfile, src_im);
 
   }
   
@@ -95,3 +107,5 @@ string get_output_filename(const int& idx){
 
   return file.str();
 }
+
+//void print_to_file()
