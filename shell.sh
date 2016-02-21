@@ -10,8 +10,9 @@ PATH=ParkingLot/
 for file in `/bin/ls ${PATH}`
 do
 #	STRFILE=${PATH}${FILESTART}"$i"${FILEEND}
-	strfile=${PATH}"$file"
- 	printf $strfile
+	strfile=${PATH}$file
+# 	printf $file
+# 	printf $strfile
 #	printf ${STRFILE}
 #	${EXECUTABLE} $(< $file)
 	${EXECUTABLE} $strfile
