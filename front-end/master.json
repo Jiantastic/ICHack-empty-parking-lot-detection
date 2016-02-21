@@ -1,0 +1,14 @@
+{
+	"location" : "London",
+
+	"promiximity" : { 
+		"one" : "Trafalgar Car Park",
+		"two" : "Victoria Station Car Park",
+		"three" : "Q-Park Westminster Car Park"
+	},
+	"empty_spaces" : {
+		"one" : "13",
+		"two" : "94",
+		"three" : "70"
+	}
+}

@@ -1,0 +1,364 @@
+<head>
+<div id="header">
+  <h1>ParkWare</h1>
+</div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
+  
+</head>
+
+<body id="body_id">
+
+<!-- LOCATOR-->
+  <form class="locator" action="" style="opacity: 1;">
+      <input class="locator__search" id="locationsearch" autocomplete="off" />
+      <input class="locator__submit" value="Where should I park?" onClick="initAutocomplete()" />
+  </form>
+  <br><br/>
+  <br><br/>
+  <br>
+    <div id="map" class="left"></div>
+    <div class="left" id="right_image"></div>
+
+<div id="jsondata"></div>
+
+<ul>
+        <input type="checkbox" value="0" id="filter-0" checked = "checked" />
+        <label for="filter-0" style="font-family: 'arvo';src: url("fonts/Arvo-Regular.TTF");
+  font-weight: normal;
+  font-style: normal; ">Free parking</label>
+  
+        <input type="checkbox" value="1" id="filter-1" checked = "checked"/>
+        <label for="filter-1" style="font-family: 'arvo';src: url("fonts/Arvo-Regular.TTF");
+  font-weight: normal;
+  font-style: normal; ">Paid parking</label>
+    
+</ul>
+
+<script>
+
+// This example adds a search box to a map, using the Google Place Autocomplete
+// feature. People can enter geographical searches. The search box will return a
+// pick list containing a mix of places and predicted search terms.
+
+// This example requires the Places library. Include the libraries=places
+// parameter when you first load the API. For example:
+// <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&libraries=places">
+
+function initAutocomplete() {
+  var bool = false;
+  var map = new google.maps.Map(document.getElementById('map'), {
+    center: {lat: 51.383130, lng: -0.098721},
+    zoom: 13,
+    mapTypeId: google.maps.MapTypeId.ROADMAP
+  });
+
+  // Create the search box and link it to the UI element.
+
+  var input = document.getElementById('locationsearch');
+
+  var addOn = 'parking lots near '; 
+  input.value = addOn.concat(input.value);
+
+  var searchBox = new google.maps.places.SearchBox(input);
+
+  // Bias the SearchBox results towards current map's viewport.
+  map.addListener('bounds_changed', function() {
+    searchBox.setBounds(map.getBounds());
+  });
+
+  var markers = [];
+  // [START region_getplaces]
+  // Listen for the event fired when the user selects a prediction and retrieve
+  // more details for that place.
+  searchBox.addListener('places_changed', function() {
+    var places = searchBox.getPlaces();
+
+    if (places.length == 0) {
+      return;
+    }
+
+    // Clear out the old markers.
+    markers.forEach(function(marker) {
+      marker.setMap(null);
+    });
+    markers = [];
+
+    // For each place, get the icon, name and location.
+    var bounds = new google.maps.LatLngBounds();
+    places.forEach(function(place) {
+      var icon = {
+        url: place.icon,
+        size: new google.maps.Size(71, 71),
+        origin: new google.maps.Point(0, 0),
+        anchor: new google.maps.Point(17, 34),
+        scaledSize: new google.maps.Size(25, 25)
+      };
+
+      // Create a marker for each place.
+      markers.push(new google.maps.Marker({
+        map: map,
+        icon: icon,
+        title: place.name,
+        position: place.geometry.location,
+        category: Math.floor(Math.random()*2)
+      }));
+       markers.forEach(function(marker) {
+        console.log("init value : " + bool);
+        var random_images = [
+        '<img class="snapshot" src="http://cache1.asset-cache.net/gc/184813292-tokyo-birds-eye-view-of-car-park-gettyimages.jpg?v=1&c=IWSAsset&k=2&d=Rcp%2BbnEqJQCL9EZR0DJvOdtEBzPMcOCDSMRe7vAdXpE%3D" />',
+        '<img class="snapshot" src="http://freakonomics.com/wp-content/uploads/2013/03/4088871694_5a1b654ed7_b.jpg"/>',
+        '<img class="snapshot" src="https://www.fjpinvestment.co.uk/wp-content/uploads/2014/03/birdseye_carpark.jpg"/>'
+        ];
+         marker.addListener('click',function(){
+          //$("#snapshot").remove();    
+          //$("#right_image").append('<div class="left" id="right_image"></div>');    
+          $("#right_image").remove();   
+          $("#body_id").append('<div class="left" id="right_image"></div>');    
+          $('#right_image').insertBefore('#jsondata');
+          console.log("test value : " + bool);
+
+          var temp = Math.floor(Math.random() * random_images.length);
+          var rand = random_images[temp];
+          if(!bool){
+            $("#right_image").append(rand); 
+
+            $(document).ready(function(){
+            var urlInfo = "https://raw.githubusercontent.com/Jiantastic/ICHack-empty-parking-lot-detection/master/master.json";
+            jQuery.ajax({
+            url  : urlInfo,
+            type : "GET",
+            success : function(response){
+              var obj = JSON.parse(response);
+              if(temp == 0){
+                var modify_html = document.getElementById("jsondata").innerHTML = "Proximity : 1 " + obj.promiximity.one;
+                var modify_2 = document.getElementById("jsondata").innerHTML ="Empty Spaces : " + obj.empty_spaces.one;
+              }
+              else if(temp == 1){
+                var modify_html = document.getElementById("jsondata").innerHTML = "Proximity : 1 " + obj.promiximity.two;
+               var modify_2 = document.getElementById("jsondata").innerHTML ="Empty Spaces : " + obj.empty_spaces.two;
+              }
+              else if(temp == 2){
+                var modify_html = document.getElementById("jsondata").innerHTML = "Proximity : 1 " + obj.promiximity.three;
+                  var modify_2 = document.getElementById("jsondata").innerHTML ="Empty Spaces : " + obj.empty_spaces.three;
+                }
+                else{
+                var modify_html = "No JSON data";
+              }
+            }
+            }).fail(function(jqXHR){
+            alert(jqXHR.status);
+            });
+          });
+            bool = true;
+          }
+           setTimeout(function(){bool=false;}, 500);    
+          bool = false;
+         });
+       });
+
+
+      if (place.geometry.viewport) {
+        // Only geocodes have viewport.
+        bounds.union(place.geometry.viewport);
+      } else {
+        bounds.extend(place.geometry.location);
+      }
+    });
+    map.fitBounds(bounds);
+    bool = false;
+
+  });
+  
+  $('input').click(function() {
+    console.log("hello world");
+    var category = $(this).val();
+    if ($(this).attr('checked')){
+      for (i = 0; i < markers.length; i++) {
+        marker = markers[i];
+        // If is same category or category not picked
+         console.log(marker.category);
+        if (marker.category == category) {
+         
+            if(marker.getVisible()){
+              marker.setVisible(false);
+            }
+            else{
+              marker.setVisible(true);
+            }
+        }
+      }
+    }
+});
+
+  // [END region_getplaces]
+}
+
+</script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC7VEL5-dqLUt5eCMMISCeNV7M_OnKRYw8&libraries=places&callback=initAutocomplete"
+         async defer></script>
+
+
+  <footer>
+    <br> </br>
+    <p>Brought to you by </p>
+    <a href="https://google.com/search?q=aaron+low">Aaron Low</a>
+    <a href="https://google.com/search?q=aditya+rajagopal">Aditya Rajagopal</a>
+    <a href="https://google.com/search?q=chan+jun+shern">Chan Jun Shern</a>
+    <br></br>
+    <a href="https://google.com/search?q=nikolay+nikolov">Nikolay Nikolov</a>
+    <a href="https://google.com/search?q=wong+wei+jian">Wong Wei Jian</a>
+    <br></br>
+    <p> </p>
+  </footer>
+
+</body>
+
+<style>
+
+@font-face {
+  font-family: 'arvo';
+  src: url("fonts/Arvo-Regular.TTF");
+  font-weight: normal;
+  font-style: normal; 
+}
+html {
+  font-size: 10px; 
+  margin-left: 5%;
+  margin-right: 5%;
+}
+h1 {
+  font-size: 5rem;
+}
+.text {
+  font-family: "arvo";
+  font-size: 1.5rem;
+  clear: both;
+  text-align: justify;
+  padding: 2rem;
+}
+footer {
+  font-family: "arvo";
+  font-size: 1rem;
+  clear: both;
+  text-align: center;
+  display: block;
+}
+#map {
+  padding-top: 20px; 
+  float: left;
+  width: 100%;
+  height: 300px;
+}
+.snapshot {
+  padding-top: 20px;
+  float:centre;
+  width:100%;
+  height:50%;
+}
+#jsondata {
+  float: right;
+  font-family: "arvo";
+  font-size: 1.5rem;
+  text-align: justify;
+  padding: 2rem;
+}
+.locator .locator__search {
+  font-family: "arvo";
+  margin: auto;
+  float: center;
+  clear: right;
+  font-size: 1.8rem;
+  width: 100%;
+  display: block;
+  padding: 1rem;
+  color: #000000;
+  text-align: left;
+  border-radius: 0;
+  border: 0.1rem solid #000000; 
+  word-wrap: break-word;
+}
+.locator .locator__search:focus {
+  color: #000000; 
+}
+
+.locator .locator__submit {
+  font-family: "arvo";
+  margin: auto;
+  float: center;
+  background: #000000;
+  text-align: center;
+  border: 0 none;
+  color: #ffffff;
+  display: block;
+  font-size: 2rem;
+  padding: 1rem;
+  width: 100%;
+}
+.locator .locator__submit:hover {
+  background: #00aba6; 
+}
+
+@media screen and (max-width: 300px) {
+  h1 {
+    font-size: 3rem;
+  }
+  .locator .locator__search {
+    font-size: 1.4rem;
+  }
+  .locator .locator__submit {
+    font-size: 1.5rem;
+  }
+}
+
+@media screen and (min-width: 800px) {
+  html {
+    margin-left: 10%;
+    margin-right: 10%;
+  }
+  .locator .locator__search {
+    font-size: 3vw;
+    width: 70%; 
+    float: left;
+    height: 60px;
+    padding-left: 1vw;
+  }
+  .locator .locator__submit {
+    float: left;
+    background: #000000;
+    border: 0 none;
+    color: #ffffff;
+    font-size: 2vw;
+    padding: 1.2rem;
+    width: 30%;
+    height: 60px; 
+  }
+  #map {
+    float: left;
+    width: 70%;
+    height: 400px;
+  }
+  .snapshot {
+    padding-top: 0px;
+    float: centre;
+    width: 30%;
+    height: auto;
+  }
+  .text {
+    font-family: "arvo";
+    font-size: 1.5rem;
+    clear: both;
+    display: inline-block;
+    text-align: justify;
+    margin-left: 10%;
+  }
+}
+
+#header {
+    font-family: "arvo";
+    color:black;
+    text-align:center;
+    padding:1rem;
+    font-size:3rem;
+}
+
+</style>
