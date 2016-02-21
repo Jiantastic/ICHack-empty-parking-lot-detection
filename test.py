@@ -1,4 +1,4 @@
-import httplib2, argparse, os, sys, json
+import httplib2, argparse, os, sys, json, math
 from oauth2client import tools, file, client
 from googleapiclient import discovery
 from googleapiclient.errors import HttpError
@@ -6,7 +6,7 @@ from googleapiclient.errors import HttpError
 project_id = "ichackathon"
 model_id = "training1"
 
-inputFile = "Data/TrainingTest2.csv"
+inputFile = "Data/TrainingTest23.csv"
 
 def train_model():
 	api = get_prediction_api(False)
@@ -46,7 +46,6 @@ def make_prediction():
 	
 	finalPrediction = prediction.get('outputValue')
 	#probabilities = prediction.get('outputMulti')
-
 	print(finalPrediction)
 	#print(probabilities)
 
