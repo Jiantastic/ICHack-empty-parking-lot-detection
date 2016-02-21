@@ -16,15 +16,12 @@
 
 <!-- LOCATOR-->
 <form class="locator" action="http://wtfsigte.com/#" style="opacity: 1;">
-    <input class="locator__search" placeholder="be done with parking" id="locationsearch" autocomplete="off" />
-    <input class="locator__submit" value="Where should I park?" onClick="initAutocomplete()" />
+    <input class="locator__search" placeholder="into the future" id="locationsearch" autocomplete="off" />
+    <input class="locator__submit" value="Where should I park?"/>
 </form>
 
-        <!-- Mapping code + search code -->
-
-
     <div id="map" class="left"></div>
-    <div class="left" id="right_image"></div>
+    <div class="left bounceOut" id="right_image"></div>
 
     <h1> Hello world, JSON test </h1>
 <div id="jsondata" style="clear: left"></div>
@@ -33,7 +30,7 @@
 <script>
 // JSON data from Google API
 
-$(document).ready(function(){
+$( document ).ready(function(){
   var urlInfo = "https://raw.githubusercontent.com/Jiantastic/ICHack-empty-parking-lot-detection/master/test.json";
   jQuery.ajax({
   url  : urlInfo,
@@ -54,7 +51,6 @@ $(document).ready(function(){
 
 
 <script>
-
 // This example adds a search box to a map, using the Google Place Autocomplete
 // feature. People can enter geographical searches. The search box will return a
 // pick list containing a mix of places and predicted search terms.
@@ -64,7 +60,6 @@ $(document).ready(function(){
 // <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&libraries=places">
 
 function initAutocomplete() {
-  var bool = false;
   var map = new google.maps.Map(document.getElementById('map'), {
     center: {lat: -33.8688, lng: 151.2195},
     zoom: 13,
@@ -72,10 +67,7 @@ function initAutocomplete() {
   });
 
   // Create the search box and link it to the UI element.
-
   var input = document.getElementById('locationsearch');
-  var test = document.createElement('input');
-
   var searchBox = new google.maps.places.SearchBox(input);
 
   // Bias the SearchBox results towards current map's viewport.
@@ -84,7 +76,6 @@ function initAutocomplete() {
   });
 
   var markers = [];
-
   // [START region_getplaces]
   // Listen for the event fired when the user selects a prediction and retrieve
   // more details for that place.
@@ -100,11 +91,6 @@ function initAutocomplete() {
       marker.setMap(null);
     });
     markers = [];
-    var test1;
-    markers.forEach(function(marker){
-      test1 = marker;
-      console.log(test1);
-    });
 
     // For each place, get the icon, name and location.
     var bounds = new google.maps.LatLngBounds();
@@ -124,22 +110,15 @@ function initAutocomplete() {
         title: place.name,
         position: place.geometry.location
       }));
-       markers.forEach(function(marker) {
-        console.log("init value : " + bool);
-        var random_images = [
-        '<img style="width:100%" src="https://static.pexels.com/photos/2586/cars-street-village-straight.jpg" style="height:400px;width:100%"/>',
-        '<img style="width:100%" src="http://cache1.asset-cache.net/gc/184813292-tokyo-birds-eye-view-of-car-park-gettyimages.jpg?v=1&c=IWSAsset&k=2&d=Rcp%2BbnEqJQCL9EZR0DJvOdtEBzPMcOCDSMRe7vAdXpE%3D" />',
-        '<img style="width:100%" src="http://freakonomics.com/wp-content/uploads/2013/03/4088871694_5a1b654ed7_b.jpg"/>',
-        '<img style="width:100%" src="https://www.fjpinvestment.co.uk/wp-content/uploads/2014/03/birdseye_carpark.jpg"/>'
-        ];
-         marker.addListener('click',function(){
-          var rand = random_images[Math.floor(Math.random() * random_images.length)];
-          if(bool == false){
-            $("#right_image").append(rand);  
-            bool = true;
+      markers.forEach(function(marker) {
+        marker.addListener('click',function(){
+          var count = 1;
+          if(count == 1){
+            $("#right_image").append('<img src="https://static.pexels.com/photos/2586/cars-street-village-straight.jpg" style="height:400px;width:100%"/>');
+            count = 2;
           }
-         });
-       });
+        });
+      });
 
 
       if (place.geometry.viewport) {
@@ -150,12 +129,13 @@ function initAutocomplete() {
       }
     });
     map.fitBounds(bounds);
-    bool = false;
   });
   // [END region_getplaces]
 }
 
-</script>
+
+    </script>
+
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC7VEL5-dqLUt5eCMMISCeNV7M_OnKRYw8&libraries=places&callback=initAutocomplete"
          async defer></script>
 
