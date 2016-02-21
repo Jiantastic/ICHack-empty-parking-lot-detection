@@ -26,7 +26,7 @@ int main( int argc, char** argv ){
   int num_files=atoi(argv[1]);
 
   ofstream csv_outfile;
-  csv_outfile.open("Data/TrainingTest1.csv");
+  csv_outfile.open("Data/TrainingTest3.csv");
   //csv_outfile.open("Data/TrainingSet1.csv");
   if(!csv_outfile.is_open()){
     cout<<"Could not open output file "<<endl;
@@ -54,7 +54,6 @@ int main( int argc, char** argv ){
 
     int result;
     results_data>>result;
-    cout<<result<<endl;
     csv_outfile<< result;
     //csv_outfile<< format(src_im, "numpy")  <<endl;
     //csv_outfile.clear();
@@ -95,7 +94,7 @@ void saveMatToCsv(const Mat& matrix, const string& filename){
 
 string get_input_filename(const int& idx){
   stringstream file;
-  file<<"OutputResized_new/images";
+  file<<"OutputResized_test/image1";
   file<<idx;
   file<<".resized.jpg";
   return file.str();
