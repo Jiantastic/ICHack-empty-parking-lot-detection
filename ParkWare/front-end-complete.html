@@ -1,0 +1,203 @@
+<head>
+<div id="header">
+<h1>ParkWare</h1>
+</div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
+  <style type="text/css">
+    #map {
+      width: 600px;
+      height: 400px;
+    }
+  .left{display:inline-block; width:50%}
+  </style>
+</head>
+
+<body>
+
+<!-- LOCATOR-->
+<form class="locator" action="http://wtfsigte.com/#" style="opacity: 1;">
+    <input class="locator__search" placeholder="into the future" id="locationsearch" autocomplete="off" />
+    <input class="locator__submit" value="Where should I park?"/>
+</form>
+
+    <p> Hello World! </p>
+    <h1>Example</h1>
+
+    <div id="map" class="left"></div>
+    <div class="left bounceOut" id="right_image"></div>
+
+    <h1> Hello world, JSON test </h1>
+<div id="jsondata" style="clear: left"></div>
+
+
+<script>
+// JSON data from Google API
+
+$( document ).ready(function(){
+  var urlInfo = "https://raw.githubusercontent.com/Jiantastic/ICHack-empty-parking-lot-detection/master/test.json";
+  jQuery.ajax({
+  url  : urlInfo,
+  type : "GET",
+  success : function(response){
+    var obj = JSON.parse(response);
+    var testlog = obj.glossary.title;
+    var modify_html = document.getElementById("jsondata").innerHTML = testlog;
+  }
+  }).fail(function(jqXHR){
+    alert(jqXHR.status);
+  });
+});
+
+
+
+</script>
+
+
+<script>
+// This example adds a search box to a map, using the Google Place Autocomplete
+// feature. People can enter geographical searches. The search box will return a
+// pick list containing a mix of places and predicted search terms.
+
+// This example requires the Places library. Include the libraries=places
+// parameter when you first load the API. For example:
+// <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&libraries=places">
+
+function initAutocomplete() {
+  var map = new google.maps.Map(document.getElementById('map'), {
+    center: {lat: -33.8688, lng: 151.2195},
+    zoom: 13,
+    mapTypeId: google.maps.MapTypeId.ROADMAP
+  });
+
+  // Create the search box and link it to the UI element.
+  var input = document.getElementById('locationsearch');
+  var searchBox = new google.maps.places.SearchBox(input);
+
+  // Bias the SearchBox results towards current map's viewport.
+  map.addListener('bounds_changed', function() {
+    searchBox.setBounds(map.getBounds());
+  });
+
+  var markers = [];
+  // [START region_getplaces]
+  // Listen for the event fired when the user selects a prediction and retrieve
+  // more details for that place.
+  searchBox.addListener('places_changed', function() {
+    var places = searchBox.getPlaces();
+
+    if (places.length == 0) {
+      return;
+    }
+
+    // Clear out the old markers.
+    markers.forEach(function(marker) {
+      marker.setMap(null);
+    });
+    markers = [];
+
+    // For each place, get the icon, name and location.
+    var bounds = new google.maps.LatLngBounds();
+    places.forEach(function(place) {
+      var icon = {
+        url: place.icon,
+        size: new google.maps.Size(71, 71),
+        origin: new google.maps.Point(0, 0),
+        anchor: new google.maps.Point(17, 34),
+        scaledSize: new google.maps.Size(25, 25)
+      };
+
+      // Create a marker for each place.
+      markers.push(new google.maps.Marker({
+        map: map,
+        icon: icon,
+        title: place.name,
+        position: place.geometry.location
+      }));
+      markers.forEach(function(marker) {
+        marker.addListener('click',function(){
+          var count = 1;
+          if(count == 1){
+            $("#right_image").append('<img src="https://static.pexels.com/photos/2586/cars-street-village-straight.jpg" style="height:400px;width:100%"/>');
+            count = 2;
+          }
+        });
+      });
+
+
+      if (place.geometry.viewport) {
+        // Only geocodes have viewport.
+        bounds.union(place.geometry.viewport);
+      } else {
+        bounds.extend(place.geometry.location);
+      }
+    });
+    map.fitBounds(bounds);
+  });
+  // [END region_getplaces]
+}
+
+
+    </script>
+
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC7VEL5-dqLUt5eCMMISCeNV7M_OnKRYw8&libraries=places&callback=initAutocomplete"
+         async defer></script>
+
+</body>
+
+<style>
+
+@font-face {
+  font-family: 'arvo';
+  src: url("fonts/Arvo-Regular.TTF");
+  font-weight: normal;
+  font-style: normal; }
+
+html {
+  font-size: 10px; }
+
+.locator .locator__search {
+  font-family: "arvo";
+  margin-left: 5rem;
+  float: left;
+  font-size: 4rem;
+  width: 60%;
+  display: block;
+  padding: 0.5rem;
+  color: #000000;
+  text-align: left;
+  border-radius: 0;
+  border: 0.1rem solid #000000; }
+  .locator .locator__search:focus {
+    color: #000000; }
+  @media screen and (min-width: 30em) {
+    .locator .locator__search {
+      font-size: 4rem;
+      width: 60%; } }
+.locator .locator__submit {
+  font-family: "arvo";
+  margin-left: 2rem;
+  background: #000000;
+  border: 0 none;
+  color: #ffffff;
+  display: block;
+  font-size: 3rem;
+  padding: 1.2rem;
+  width: 25%; }
+  .locator .locator__submit:hover {
+    background: #00aba6; }
+  @media screen and (min-width: 30em) {
+    .locator .locator__submit {
+      font-size: 3rem;
+      width: 25%; } }
+
+#header {
+    font-family: "arvo";
+    color:black;
+    text-align:center;
+    padding:1rem;
+    font-size:3rem;
+}
+
+
+
+</style>

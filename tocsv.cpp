@@ -26,7 +26,8 @@ int main( int argc, char** argv ){
   int num_files=atoi(argv[1]);
 
   ofstream csv_outfile;
-  csv_outfile.open("Data/TrainingSet1.csv");
+  csv_outfile.open("Data/TrainingTest1.csv");
+  //csv_outfile.open("Data/TrainingSet1.csv");
   if(!csv_outfile.is_open()){
     cout<<"Could not open output file "<<endl;
     exit(EXIT_FAILURE);
@@ -78,6 +79,7 @@ int main( int argc, char** argv ){
   //waitKey(0);
   return 0;
 }
+
 
 
 void saveMatToCsv(const Mat& matrix, const string& filename){
