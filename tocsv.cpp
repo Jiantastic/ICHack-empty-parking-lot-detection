@@ -95,7 +95,7 @@ void saveMatToCsv(const Mat& matrix, const string& filename){
 
 string get_input_filename(const int& idx){
   stringstream file;
-  file<<"OutputResized/images";
+  file<<"OutputResized_new/images";
   file<<idx;
   file<<".resized.jpg";
   return file.str();
