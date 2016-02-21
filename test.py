@@ -11,7 +11,7 @@ def train_model():
 	print("Training model")
 	iBody = {
 		"id": model_id,
-		"storageDataLocation": "trainingset1_ichack/TrainingSet1.csv",
+		"storageDataLocation": "trainingset2_ichack/TrainingSet1.csv",
 		"modelType": "regression"
 	}
 	api.trainedmodels().insert(project=project_id, body = iBody).execute()
@@ -29,12 +29,22 @@ def check_if_ready():
 		print ('Still training \n Run again after a while')
 		exit()
 	print ('Model is ready')
+	#train_model()
 	make_prediction()
 	#analyse_model()
 
+def update_model():
+	api = get_prediction_api(False)
+	with open('Data/TrainingTest1.csv') as file:
+		record = file.readline().split(',')
+	iBody = {
+		"csvIsntance":record
+	}
+	model = api.trainedmodels().update(project=project_id, id = model_id, body=iBody).execute()
+
 def make_prediction():
 	api = get_prediction_api(False)
-	with open('predict.txt') as file:
+	with open('Data/TrainingTest2.csv') as file:
 		record = file.readline().split(',')
 	iBody = {
 		'input': {
