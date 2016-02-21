@@ -22,9 +22,8 @@ void saveMatToCsv(const Mat& matrix, const string& filename);
 int main( int argc, char** argv ){
 
  //char* imageName = argv[1];
-  int num_files=atoi(argv[1]);
+  int i=atoi(argv[1]);
 
-	for(int i=1; i<=num_files; i++){
     Mat src_im, dst_im;
 
     // Load Image
@@ -79,7 +78,6 @@ int main( int argc, char** argv ){
 
     //saveMatToCsv(dst_im, "testcsv.csv");
     imwrite( get_output_filename(i), crop_img );
-  }
  
  	//waitKey(0);
 	return 0;

@@ -50,8 +50,8 @@ int main( int argc, char** argv ){
     {
         for(int j=0; j<src_im.cols; j++)
         {
-            csv_outfile<<", "<<src_im.at<uint32_t>(i,j);
-            if(i!=src_im.rows && j!=src_im.cols) csv_outfile<<", ";
+            csv_outfile<<src_im.at<uint32_t>(i,j);
+            if(i!=src_im.rows-1 || j!=src_im.cols-1) csv_outfile<<", ";
         }
     }
     csv_outfile<<endl;
