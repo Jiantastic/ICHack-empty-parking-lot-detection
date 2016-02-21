@@ -4,15 +4,15 @@ from googleapiclient import discovery
 from googleapiclient.errors import HttpError
 
 project_id = "ichackathon"
-model_id = "test"
+model_id = "training1"
 
 def train_model():
 	api = get_prediction_api(False)
 	print("Training model")
 	iBody = {
 		"id": model_id,
-		"storageDataLocation": "ichacktestdata/language_id.txt",
-		"modelType": "classification"
+		"storageDataLocation": "trainingset1_ichack/TrainingSet1.csv",
+		"modelType": "regression"
 	}
 	api.trainedmodels().insert(project=project_id, body = iBody).execute()
 
@@ -27,10 +27,10 @@ def check_if_ready():
 	model = api.trainedmodels().get(project=project_id, id=model_id).execute()
 	if model.get('trainingStatus') != 'DONE':
 		print ('Still training \n Run again after a while')
-		return false
 		exit()
 	print ('Model is ready')
 	make_prediction()
+	#analyse_model()
 
 def make_prediction():
 	api = get_prediction_api(False)
@@ -43,11 +43,11 @@ def make_prediction():
 	}
 	prediction = api.trainedmodels().predict(project=project_id, id=model_id, body=iBody).execute()
 	
-	finalPrediction = prediction.get('outputLabel')
-	probabilities = prediction.get('outputMulti')
+	finalPrediction = prediction.get('outputValue')
+	#probabilities = prediction.get('outputMulti')
 
 	print(finalPrediction)
-	print(probabilities)
+	#print(probabilities)
 
 def get_prediction_api(service_account=True):
 	scope = [
